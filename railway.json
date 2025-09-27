@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "./target/release/burger-be",
+    "startCommand": "cargo run --release",
     "healthcheckPath": "/get-burgers",
     "healthcheckTimeout": 100,
     "restartPolicyType": "ON_FAILURE",

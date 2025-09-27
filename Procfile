@@ -1,1 +1,1 @@
-web: ./target/release/burger-be
+web: cargo run --release
