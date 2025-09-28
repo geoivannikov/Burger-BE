@@ -24,7 +24,11 @@ async fn main() {
                 .allow_headers(Any),
         );
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let port = std::env::var("PORT")
+        .unwrap_or_else(|_| "3000".to_string())
+        .parse::<u16>()
+        .unwrap_or(3000);
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
     
     println!("🚀 Server starting on http://{}", addr);
     println!("📋 Available endpoints:");
