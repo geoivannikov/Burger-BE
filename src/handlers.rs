@@ -1,5 +1,7 @@
-use axum::{response::Json, http::StatusCode};
+use axum::{response::Json, http::StatusCode, response::Response, body::Body, extract::Path};
 use serde_json::json;
+use std::path::Path as StdPath;
+use tokio::fs;
 use crate::models::Burger;
 
 pub async fn get_burgers() -> Result<Json<serde_json::Value>, StatusCode> {
@@ -25,6 +27,37 @@ pub async fn get_burgers() -> Result<Json<serde_json::Value>, StatusCode> {
     Ok(Json(json!({
         "burgers": burgers
     })))
+}
+
+pub async fn get_burger_image(Path(filename): Path<String>) -> Result<Response<Body>, StatusCode> {
+    let current_dir = std::env::current_dir().map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let file_path = current_dir.join("static").join(&filename);
+    
+    if !file_path.exists() {
+        return Err(StatusCode::NOT_FOUND);
+    }
+    
+    match fs::read(&file_path).await {
+        Ok(contents) => {
+            let mime_type = match StdPath::new(&file_path).extension().and_then(|s| s.to_str()) {
+                Some("png") => "image/png",
+                Some("jpg") | Some("jpeg") => "image/jpeg",
+                Some("gif") => "image/gif",
+                Some("webp") => "image/webp",
+                _ => "application/octet-stream",
+            };
+            
+            let response = Response::builder()
+                .status(200)
+                .header("Content-Type", mime_type)
+                .header("Cache-Control", "public, max-age=3600") 
+                .body(Body::from(contents))
+                .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+            
+            Ok(response)
+        }
+        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
+    }
 }
 
 pub async fn health_check() -> Result<Json<serde_json::Value>, StatusCode> {

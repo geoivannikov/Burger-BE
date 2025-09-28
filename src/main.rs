@@ -13,6 +13,7 @@ async fn main() {
     let app = Router::new()
         .route("/get-burgers", get(handlers::get_burgers))
         .route("/health", get(handlers::health_check))
+        .route("/images/:filename", get(handlers::get_burger_image))
         .nest_service("/", ServeDir::new("static"))
         .layer(
             CorsLayer::new()
@@ -30,6 +31,8 @@ async fn main() {
     println!("🚀 Server starting on http://{}", addr);
     println!("📋 Available endpoints:");
     println!("   GET  /get-burgers");
+    println!("   GET  /images/:filename");
+    println!("   GET  /health");
 
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
