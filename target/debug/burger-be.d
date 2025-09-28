@@ -1,1 +1,0 @@
-/Users/s0143190/Desktop/Pet2/burger-BE/target/debug/burger-be: /Users/s0143190/Desktop/Pet2/burger-BE/src/handlers.rs /Users/s0143190/Desktop/Pet2/burger-BE/src/main.rs /Users/s0143190/Desktop/Pet2/burger-BE/src/models.rs
