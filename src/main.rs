@@ -24,17 +24,13 @@ async fn main() {
                 .allow_headers(Any),
         );
 
-    let port = std::env::var("PORT")
-        .unwrap_or_else(|_| "3000".to_string())
-        .parse::<u16>()
-        .unwrap_or(3000);
+    let port = 3000;
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
     
     println!("🚀 Server starting on http://{}", addr);
     println!("📋 Available endpoints:");
     println!("   GET  /get-burgers");
 
-    // Запускаем сервер
-    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
