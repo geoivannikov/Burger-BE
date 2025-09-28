@@ -1,15 +1,12 @@
-mod models;
 mod handlers;
+mod models;
 
-use axum::{
-    routing::get,
-    Router,
-};
+use axum::{routing::get, Router};
+use std::net::SocketAddr;
 use tower_http::{
-    cors::{CorsLayer, Any},
+    cors::{Any, CorsLayer},
     services::ServeDir,
 };
-use std::net::SocketAddr;
 
 #[tokio::main]
 async fn main() {
@@ -24,9 +21,12 @@ async fn main() {
                 .allow_headers(Any),
         );
 
-    let port = 3000;
+    let port: u16 = std::env::var("PORT")
+        .ok()
+        .and_then(|s| s.parse().ok())
+        .unwrap_or(3000);
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
-    
+
     println!("🚀 Server starting on http://{}", addr);
     println!("📋 Available endpoints:");
     println!("   GET  /get-burgers");
