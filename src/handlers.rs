@@ -26,3 +26,10 @@ pub async fn get_burgers() -> Result<Json<serde_json::Value>, StatusCode> {
         "burgers": burgers
     })))
 }
+
+pub async fn health_check() -> Result<Json<serde_json::Value>, StatusCode> {
+    Ok(Json(json!({
+        "status": "ok",
+        "message": "Server is running"
+    })))
+}

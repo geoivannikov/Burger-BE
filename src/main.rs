@@ -15,6 +15,7 @@ use std::net::SocketAddr;
 async fn main() {
     let app = Router::new()
         .route("/get-burgers", get(handlers::get_burgers))
+        .route("/health", get(handlers::health_check))
         .nest_service("/", ServeDir::new("static"))
         .layer(
             CorsLayer::new()
