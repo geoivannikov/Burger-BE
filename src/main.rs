@@ -14,7 +14,7 @@ async fn main() {
         .route("/health", get(handlers::health_check))
         .route("/get-burgers", get(handlers::get_burgers))
         .route("/images/:filename", get(handlers::get_burger_image))
-        .route("/news_subscribe", post(handlers::news_subscribe))
+        // .route("/news_subscribe", post(handlers::news_subscribe))
         .nest_service("/static", ServeDir::new("static"))
         .layer(
             CorsLayer::new()
