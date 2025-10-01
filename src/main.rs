@@ -11,9 +11,8 @@ use tower_http::{
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .route("/", get(handlers::health_check))
-        .route("/get-burgers", get(handlers::get_burgers))
         .route("/health", get(handlers::health_check))
+        .route("/get-burgers", get(handlers::get_burgers))
         .route("/images/:filename", get(handlers::get_burger_image))
         .nest_service("/static", ServeDir::new("static"))
         .layer(
