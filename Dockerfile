@@ -11,6 +11,7 @@ FROM debian:bookworm-slim
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /app/target/release/burger-be /app/burger-be
+COPY --from=builder /app/static /app/static
 RUN chmod +x /app/burger-be
 EXPOSE 3000
 CMD ["/app/burger-be"]
