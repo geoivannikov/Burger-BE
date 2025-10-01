@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use validator::Validate;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Burger {
@@ -20,8 +19,7 @@ impl Burger {
     }
 }
 
-#[derive(Deserialize, Debug, Validate)]
+#[derive(Deserialize, Debug)]
 pub struct NewsSubscribe {
-    #[validate(email(message = "Invalid email format"))]
     pub email: String,
 }

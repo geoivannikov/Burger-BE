@@ -3,7 +3,6 @@ use serde_json::json;
 use std::path::Path as StdPath;
 use tokio::fs;
 use crate::models::{Burger, NewsSubscribe};
-use validator::Validate;
 
 pub async fn get_burgers() -> Result<Json<serde_json::Value>, StatusCode> {
     let burgers = vec![
@@ -71,14 +70,6 @@ pub async fn health_check() -> Result<Json<serde_json::Value>, StatusCode> {
 pub async fn news_subscribe(ExtractJson(payload): ExtractJson<NewsSubscribe>) -> Result<Json<serde_json::Value>, StatusCode> {
     println!("📧 News subscription request for email: {}", payload.email);
     
-    if let Err(validation_errors) = payload.validate() {
-        println!("❌ Validation failed: {:?}", validation_errors);
-        return Ok(Json(json!({
-            "status": "error",
-            "message": "Validation failed",
-            "errors": validation_errors
-        })));
-    }
     
     if payload.email.is_empty() {
         return Ok(Json(json!({
