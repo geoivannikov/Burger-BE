@@ -1,7 +1,7 @@
 mod handlers;
 mod models;
 
-use axum::{routing::get, Router};
+use axum::{routing::{get, post}, Router};
 use std::net::SocketAddr;
 use tower_http::{
     cors::{Any, CorsLayer},
@@ -14,6 +14,7 @@ async fn main() {
         .route("/health", get(handlers::health_check))
         .route("/get-burgers", get(handlers::get_burgers))
         .route("/images/:filename", get(handlers::get_burger_image))
+        .route("/news_subscribe", post(handlers::news_subscribe))
         .nest_service("/static", ServeDir::new("static"))
         .layer(
             CorsLayer::new()
@@ -34,6 +35,7 @@ async fn main() {
     println!("   GET  /get-burgers");
     println!("   GET  /images/:filename");
     println!("   GET  /health");
+    println!("   POST /news_subscribe");
     println!("🔧 Environment PORT: {:?}", std::env::var("PORT"));
     println!("🔧 Binding to: {}", addr);
 
