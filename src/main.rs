@@ -15,7 +15,7 @@ async fn main() {
         .route("/health", get(health_check))
         .route("/get-burgers", get(handlers::get_burgers))
         .route("/images/:filename", get(handlers::get_burger_image))
-        // .route("/news_subscribe", post(handlers::news_subscribe))
+        .route("/news_subscribe", post(handlers::news_subscribe))
         .nest_service("/static", ServeDir::new("static"))
         .layer(
             CorsLayer::new()
@@ -49,7 +49,7 @@ async fn main() {
 }
 
 async fn root() -> &'static str {
-    "Welcome to LingPing Backend API!"
+    "Welcome to Burger Backend API!"
 }
 
 async fn health_check() -> &'static str {
