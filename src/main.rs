@@ -11,6 +11,7 @@ use tower_http::{
 #[tokio::main]
 async fn main() {
     let app = Router::new()
+        .route("/", get(handlers::health_check))  // Root path for Railway
         .route("/health", get(handlers::health_check))
         .route("/get-burgers", get(handlers::get_burgers))
         .route("/images/:filename", get(handlers::get_burger_image))
@@ -38,6 +39,7 @@ async fn main() {
     println!("   POST /news_subscribe");
     println!("🔧 Environment PORT: {:?}", std::env::var("PORT"));
     println!("🔧 Binding to: {}", addr);
+    println!("🔧 Railway health check will use: http://0.0.0.0:{}/health", port);
 
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     println!("✅ Server successfully bound to {}", addr);
