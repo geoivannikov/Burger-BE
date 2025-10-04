@@ -11,7 +11,7 @@ use tower_http::{
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .route("/", get(root))
+        .route("/", get(health_check))
         .route("/health", get(health_check))
         .route("/get-burgers", get(handlers::get_burgers))
         .route("/images/:filename", get(handlers::get_burger_image))
