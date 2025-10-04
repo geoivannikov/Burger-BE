@@ -11,8 +11,8 @@ use tower_http::{
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .route("/", get(handlers::health_check))  // Root path for Railway
-        .route("/health", get(handlers::health_check))
+        .route("/", get(root))
+        .route("/health", get(health_check))
         .route("/get-burgers", get(handlers::get_burgers))
         .route("/images/:filename", get(handlers::get_burger_image))
         // .route("/news_subscribe", post(handlers::news_subscribe))
@@ -47,3 +47,11 @@ async fn main() {
     
     axum::serve(listener, app).await.unwrap();
 }
+
+async fn root() -> &'static str {
+    "Welcome to LingPing Backend API!"
+}
+
+async fn health_check() -> &'static str {
+    "OK"
+} 

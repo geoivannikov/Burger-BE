@@ -59,15 +59,6 @@ pub async fn get_burger_image(Path(filename): Path<String>) -> Result<Response<B
     }
 }
 
-pub async fn health_check() -> Result<Json<serde_json::Value>, StatusCode> {
-    println!("🏥 Health check requested");
-    Ok(Json(json!({
-        "status": "ok",
-        "message": "Server is running",
-        "timestamp": chrono::Utc::now().to_rfc3339()
-    })))
-}
-
 pub async fn news_subscribe(ExtractJson(payload): ExtractJson<NewsSubscribe>) -> Result<Json<serde_json::Value>, StatusCode> {
     println!("📧 News subscription request for email: {}", payload.email);
     
