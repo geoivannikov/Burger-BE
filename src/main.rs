@@ -42,11 +42,24 @@ async fn main() {
     println!("🔧 Binding to: {}", addr);
     println!("🔧 Railway health check will use: http://0.0.0.0:{}/health", port);
 
-    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-    println!("✅ Server successfully bound to {}", addr);
-    println!("🌐 Health check available at: http://{}:{}/health", "0.0.0.0", port);
+    let listener = match tokio::net::TcpListener::bind(addr).await {
+        Ok(listener) => {
+            println!("✅ Server successfully bound to {}", addr);
+            listener
+        }
+        Err(e) => {
+            eprintln!("❌ Failed to bind to {}: {}", addr, e);
+            std::process::exit(1);
+        }
+    };
     
-    axum::serve(listener, app).await.unwrap();
+    println!("🌐 Health check available at: http://0.0.0.0:{}/health", port);
+    println!("🚀 Server is ready and listening on port {}", port);
+    
+    if let Err(e) = axum::serve(listener, app).await {
+        eprintln!("❌ Server error: {}", e);
+        std::process::exit(1);
+    }
 }
 
 async fn root() -> &'static str {

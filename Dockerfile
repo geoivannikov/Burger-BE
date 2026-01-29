@@ -9,9 +9,11 @@ RUN cargo build --release --locked --bin burger-be
 
 FROM debian:bookworm-slim
 WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /app/target/release/burger-be /app/burger-be
 COPY --from=builder /app/static /app/static
 RUN chmod +x /app/burger-be
 EXPOSE 3000
+HEALTHCHECK --interval=10s --timeout=5s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:3000/ || exit 1
 CMD ["/app/burger-be"]
