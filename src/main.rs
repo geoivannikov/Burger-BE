@@ -1,12 +1,13 @@
 mod handlers;
 mod models;
 
-use axum::{routing::{get, post}, Router};
+use axum::{routing::{get, post}, Router, response::Json};
 use std::net::SocketAddr;
 use tower_http::{
     cors::{Any, CorsLayer},
     services::ServeDir,
 };
+use serde_json::json;
 
 #[tokio::main]
 async fn main() {
@@ -52,6 +53,9 @@ async fn root() -> &'static str {
     "Welcome to Burger Backend API!"
 }
 
-async fn health_check() -> &'static str {
-    "OK"
+async fn health_check() -> Json<serde_json::Value> {
+    Json(json!({
+        "status": "ok",
+        "service": "burger-be"
+    }))
 } 
